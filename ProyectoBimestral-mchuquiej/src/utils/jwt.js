@@ -1,16 +1,15 @@
 'use strict'
 
-import jwt from 'jsonwebtoken'
+import  Jwt  from "jsonwebtoken"
+const secretKey = '@LlaveSuperSecretaDe2022076@'
 
-const secretKey = '@LlaveSuperSecretaDeIN6AV'
-
-export const generateJwt = async(payload) => {
+export const generarJwt = async(payload)=>{
     try {
-        return jwt.sign(payload, secretKey, {
-            expiresIn: '2h',
+        return Jwt.sign(payload,secretKey,{
+            expiresIn: '3h',
             algorithm: 'HS256'
         })
-    } catch(err){
+    } catch (err) {
         console.error(err)
         return err
     }

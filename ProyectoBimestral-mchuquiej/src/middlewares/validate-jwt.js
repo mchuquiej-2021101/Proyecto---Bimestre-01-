@@ -1,37 +1,35 @@
 'use strict'
 
-import jwt from 'jsonwebtoken'
-import User from '../user/user.model.js'
+import  Jwt  from "jsonwebtoken"
+import userModel from "../user/user.model.js"
 
-export const validateJwt = async(req, res, next)=>{
-    try{
-        //Obtener la llave de acceso al token
-        let secretKey = process.env.SECRET_KEY
-        //Obtener el token de los headers
-        let { token } = req.headers
-        //Verificar si viene el token
-        if(!token) return res.status(401).send({message: 'Sin autorización'})
-        //obtener el uid que envió el token
-        let { uid } = jwt.verify(token, secretKey)
-        //Validar si el usuario aún existe en la BD
-        let user = await User.findOne({_id: uid})
-        if(!user) return res.status(404).send({message: 'Usuario no encontrado - No autorizado'})
-        //Ok del Middleware
+export const validateJwt =async(req,res,next)=>{
+    try {
+        let secretKey = process.env.SECRET_KEY 
+        console.log(secretKey)
+        let {token} = req.headers
+        if(!token) return res.status(401).send({message:'ALERTA!! - No está autorizado.'})
+        let {uid} = Jwt.verify(token,secretKey)
+        let user = await userModel.findOne({_id:uid})
+        if(!user) return res.status(404).send({message: 'Usuario no encontrado.'})
         req.user = user
         next()
-    }catch(err){
+
+    } catch (err) {
         console.error(err)
-        return res.status(401).send({message: 'Token no válido o vencido'})
+        return res.status(401).send({message:'Token inválido o ya a expirado.'})
+        
     }
 }
 
-export const isAdmin = async(req, res, next)=>{
-    try{
-        let { role, username } = req.user
-        if(!role || role !== 'ADMIN') return res.status(403).send({message: `Sin acceso | username ${username}`})
+export const admin = async(req,res,next)=>{
+    try {
+        let {rol,usuario} = req.user
+        if(!rol || rol !== 'ADMIN') return res.status(403).send({message: `ADVERTENCIA!! - El usuario ${usuario} no tiene acceso a esta función`})
         next()
-    }catch(err){
+    } catch (err) {
         console.error(err)
-        return res.status(401).send({message: 'Rol no autorizado'})
+        return res.status(401).send({message: 'No está aurotizado.'})
+        
     }
 }

@@ -1,45 +1,40 @@
-import mongoose from 'mongoose'
+import { Schema, model } from "mongoose"
 
-const userSchema = mongoose.Schema({
-    name: {
+const UserSchema = Schema({
+    nombre:{
+        type:String,
+        required: true
+    },
+    apellido:{
         type: String,
         required: true
     },
-    surname: {
-        type: String,
+    email:{
+        type:String,
         required: true
     },
-    email: {
-        type: String,
+    usuario:{
+        type:String,
+        unique: true,
+        lowerCase: true,
         required: true
     },
-    username: {
-        type: String,
-        unique: true, //Solo un único registro puede existir
-        lowercase: true,
+    contraseña:{
+        type:String,
+        minLength: [8,'contraseña muy pequeña'],
         required: true
     },
-    password: {
-        type: String,
-        minLength: [8, 'La contraseña debe tener 8 caracteres'],
+    telefono:{
+        type:String,
+        minLength:8,
         required: true
     },
-    phone: {
-        type: String,
-        minLength: 8,
-        maxLength: 8,
-        required: true
-    },
-    address: {
-        type: String,
-        required: true
-    },
-    role: {
-        type: String,
+    rol:{
+        type:String,
         uppercase: true,
-        enum: ['ADMIN', 'CLIENT'], //Solo los datos que estén en el arreglo son válido
-        required: true
+        enum:['CLIENTE','ADMIN'],
+        required :true
     }
 })
 
-export default mongoose.model('user', userSchema)
+export default model('usuario',UserSchema)

@@ -1,4 +1,4 @@
-//CONEXIÓN A MOMGODB
+//Conexión a MongoDB
 
 'use strict'
 
@@ -7,7 +7,7 @@ import mongoose from 'mongoose'
 export const connect = async()=>{
     try{
         mongoose.connection.on('error', ()=>{
-            console.log('MongoDB | no se pudo conectar a MongoDB')
+            console.log('MongoDB | No se pudo conectar a MongoDB')
             mongoose.disconnect()
         })
         mongoose.connection.on('connecting', ()=> console.log('MongoDB | try connecting'))
@@ -16,9 +16,8 @@ export const connect = async()=>{
         mongoose.connection.on('disconnected', ()=> console.log('MongoDB | disconnected'))
         mongoose.connection.on('reconnected', ()=> console.log('MongoDB | reconnected to mongodb'))
 
-        return await mongoose.connect('mongodb://127.0.0.1:27017/PBRegistroDeVentas1')
+        return await mongoose.connect('mongodb://127.0.0.1:27017/ProyectoBimestral01')
     }catch(err){
-        console.error('Error en la conexión a la base de datos', err)
+        console.error('No se pudo contectar a la base de datos.', err)
     }
 }
-
